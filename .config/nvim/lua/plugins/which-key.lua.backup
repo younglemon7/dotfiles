@@ -1,0 +1,97 @@
+-- Lazy loading with event trigger
+vim.pack.add({
+  { src = "https://github.com/folke/which-key.nvim", event = "VeryLazy" },
+})
+
+-- Modern which-key setup with comprehensive configuration
+require("which-key").setup({
+  preset = "helix",
+  -- Built-in plugins
+  plugins = {
+    marks = true,
+    registers = true,
+    spelling = {
+      enabled = true,
+      suggestions = 20,
+    },
+    presets = {
+      operators = true,
+      motions = true,
+      text_objects = true,
+      windows = true,
+      nav = true,
+      z = true,
+      g = true,
+    },
+  },
+  
+  -- Window styling
+  win = {
+    no_overlap = true,
+    padding = { 1, 2 },
+    title = true,
+    title_pos = "center",
+    border = "rounded",
+  },
+  
+  -- Icons configuration
+  icons = {
+    breadcrumb = "»",
+    separator = "➜",
+    group = "+",
+    mappings = true,
+    colors = true,
+  },
+  
+  -- Key mappings organized by groups
+  spec = {
+    -- File operations
+    { "<leader>f", group = "file" },
+    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
+    { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+    { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+    
+    -- Search operations  
+    { "<leader>s", group = "search" },
+    { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
+    { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "Word" },
+    { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help" },
+    { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
+    { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
+    { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "Resume" },
+    { "<leader>s.", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
+    
+    -- Git operations
+    { "<leader>g", group = "git" },
+    { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+    { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Commits" },
+    { "<leader>gcf", "<cmd>Telescope git_bcommits<cr>", desc = "Current File Commits" },
+    { "<leader>gb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
+    { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Status" },
+    
+    -- Window management
+    { "<leader>w", group = "window" },
+    { "<leader>wh", "<cmd>split<cr>", desc = "Horizontal Split" },
+    { "<leader>wv", "<cmd>vsplit<cr>", desc = "Vertical Split" },
+    
+    -- Buffer navigation
+    { "<leader>b", group = "buffer" },
+    { "<leader>bn", "<cmd>bnext<cr>", desc = "Next Buffer" },
+    { "<leader>bp", "<cmd>bprevious<cr>", desc = "Previous Buffer" },
+    
+    -- LSP
+    { "<leader>l", group = "lsp" },
+    { "<leader>lf", vim.lsp.buf.format, desc = "Format" },
+    
+    -- Utilities
+    { "<leader>c", "<cmd>nohlsearch<cr>", desc = "Clear Highlights" },
+    { "<leader>lw", "<cmd>set wrap!<cr>", desc = "Toggle Line Wrap" },
+    { "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown Preview" },
+    { "<leader>e", "<cmd>Explore<cr>", desc = "File Explorer" },
+  },
+  
+  -- Show help key
+  keys = {
+    { "<leader>?", function() require("which-key").show({ global = false }) end, desc = "Buffer Local Keymaps" },
+  },
+})
