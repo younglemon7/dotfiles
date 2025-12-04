@@ -19,6 +19,9 @@ alias ls="eza -l --icons"
 alias vim="nvim"
 alias dotfiles='git -c status.showUntrackedFiles=no --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
+bindkey '^[[1;3D' backward-word # Option + Left Arrow
+bindkey '^[[1;3C' forward-word  # Option + Right Arrow
+
 export PATH="$PATH:/Users/lemon/.local/bin"
 export PATH="/opt/homebrew/bin:$PATH"
 export KUBE_EDITOR="nvim"
