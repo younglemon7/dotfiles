@@ -7,6 +7,7 @@ tap "nikitabobko/tap"
 brew "openssl@3"
 # Automate deployment, configuration, and upgrading
 brew "ansible"
+brew "zsh-autosuggestions"
 # GitOps Continuous Delivery for Kubernetes
 brew "argocd"
 # Bourne-Again SHell, a UNIX command interpreter
