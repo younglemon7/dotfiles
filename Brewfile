@@ -12,8 +12,6 @@ brew "zsh-autosuggestions"
 brew "argocd"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
-# Programmable completion for Bash 3.2
-brew "bash-completion", link: false
 # Programmable completion for Bash 4.2+
 brew "bash-completion@2"
 # CLI and validation tools for Kubelet Container Runtime Interface (CRI)
