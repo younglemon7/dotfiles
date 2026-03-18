@@ -1,46 +1,45 @@
-vim.pack.add({ "https://github.com/epwalsh/obsidian.nvim" }, { "https://github.com/nvim-lua/plenary.nvim" })
+vim.pack.add({ "https://github.com/obsidian-nvim/obsidian.nvim" }, { "https://github.com/nvim-lua/plenary.nvim" })
+
+local mappings = require("obsidian.mappings")
 
 require("obsidian").setup({
-	workspaces = {
-		{
-			name = "Lemon",
-			path = "~/notes",
-		},
-	},
-	notes_subdir = "inbox",
-	new_notes_location = "notes_subdir",
-
-	daily_notes = {
-		-- Optional, if you keep daily notes in a separate directory.
-		folder = "notes/dailies",
-		-- Optional, if you want to change the date format for the ID of daily notes.
-		date_format = "%Y-%m-%d",
-		-- Optional, if you want to change the date format of the default alias of daily notes.
-		alias_format = "%B %-d, %Y",
-		-- Optional, default tags to add to each new daily note created.
-		default_tags = { "daily-notes" },
-		-- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-		template = "daily",
-	},
-
-	disable_frontmatter = true,
-	ui = { enable = false }, -- Disable obsidian UI
-	templates = {
-		subdir = "templates",
-		date_format = "%Y-%m-%d",
-		time_format = "%H:%M:%S",
-	},
-	mappings = {
-		-- overrides the 'gf' mapping to work on markdown/wiki links within your vault
-		["gf"] = {
-			action = function()
-				return require("obsidian").util.gf_passthrough()
-			end,
-			opts = { noremap = false, expr = true, buffer = true },
-		},
-	},
-	completion = {
-		nvim_cmp = false,
-		min_chars = 2,
-	},
+  legacy_commands = false,
+  workspaces = {
+    {
+      name = "Lemon",
+      path = "~/notes",
+    },
+  },
+  notes_subdir = "0 Inbox",
+  new_notes_location = "notes_subdir",
+  daily_notes = {
+    folder = "notes/dailies",
+    date_format = "YYYY-MM-DD",
+    alias_format = "MMMM d, yyyy",
+    default_tags = { "daily-notes" },
+    template = "daily",
+  },
+  frontmatter = {
+    enabled = true,
+  },
+  ui = {
+    enable = true,
+  },
+  templates = {
+    folder = "templates",
+    date_format = "YYYY-MM-DD",
+    time_format = "HH:mm:ss",
+  },
+  mappings = {
+    ["gf"] = mappings.gf_passthrough(),
+    ["<leader>ch"] = mappings.toggle_checkbox(),
+    ["<cr>"] = mappings.smart_action(),
+  },
+  completion = {
+    nvim_cmp = true,
+    min_chars = 2,
+  },
+  picker = {
+    name = "telescope.nvim",
+  },
 })

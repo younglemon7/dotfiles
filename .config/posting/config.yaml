@@ -1,1 +1,4 @@
 theme: nord
+keymap:
+  save-request: ctrl+w
+  open-in-editor: ctrl+e

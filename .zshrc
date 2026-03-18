@@ -45,13 +45,17 @@ zstyle ':completion:*' rehash true
 autoload -Uz select-word-style
 select-word-style bash
 
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
 # ==============================================================================
 # 3. ALIASES
 # ==============================================================================
 
 # File listing with eza (modern ls replacement)
 if command -v eza &> /dev/null; then
-    alias ls='eza --icons'
+    alias ls='eza --icons always'
     alias l='eza -l --icons --git'
     alias la='eza -la --icons --git'
     alias ll='eza -la --icons --git'
@@ -64,6 +68,7 @@ else
     alias ll='ls -lah'
 fi
 
+alias sshost='bash ~/.ssh/sshost.sh'
 # Editor aliases
 alias vim='nvim'
 alias vi='nvim'
@@ -83,6 +88,8 @@ export PATH="$PATH:$HOME/.local/bin"
 export EDITOR='nvim'
 export VISUAL='nvim'
 export KUBE_EDITOR='nvim'
+
+export AICHAT_CONFIG_DIR="$HOME/.config/aichat/"
 
 # Kubernetes tools
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -173,3 +180,35 @@ zedit() {
 # Load local overrides if they exist
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
+#compdef opencode
+###-begin-opencode-completions-###
+#
+# yargs command completion script
+#
+# Installation: opencode completion >> ~/.zshrc
+#    or opencode completion >> ~/.zprofile on OSX.
+#
+_opencode_yargs_completions()
+{
+  local reply
+  local si=$IFS
+  IFS=$'
+' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" opencode --get-yargs-completions "${words[@]}"))
+  IFS=$si
+  if [[ ${#reply} -gt 0 ]]; then
+    _describe 'values' reply
+  else
+    _default
+  fi
+}
+if [[ "'${zsh_eval_context[-1]}" == "loadautofunc" ]]; then
+  _opencode_yargs_completions "$@"
+else
+  compdef _opencode_yargs_completions opencode
+fi
+###-end-opencode-completions-###
+
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/lemon/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

@@ -1,3 +1,4 @@
+format = "$time$all"
 [aws]
 disabled = true
 [gcloud]
@@ -17,3 +18,10 @@ symbol = "💔 "
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
 context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
+# ~/.config/starship.toml
+
+[time]
+disabled = false
+format = '[$time]($style) '
+time_format = '%T'
+utc_time_offset = 'local'

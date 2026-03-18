@@ -5,7 +5,11 @@ vim.pack.add({
 })
 
 require("mason").setup()
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+	ensure_installed = { "lua_ls", "yamlls" },
+})
+
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- PLUGIN KEYMAPS ---
 vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "LSP Format" })
@@ -19,6 +23,7 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Show LSP definition"
 -- })
 --
 vim.lsp.config("lua_ls", {
+	capabilities = capabilities,
 	settings = {
 		Lua = {
 			runtime = {
@@ -44,3 +49,17 @@ vim.lsp.config("lua_ls", {
 		},
 	},
 })
+
+vim.lsp.config("yamlls", {
+	capabilities = capabilities,
+	settings = {
+		yaml = {
+			format = {
+				enable = true,
+			},
+			validate = true,
+		},
+	},
+})
+
+vim.lsp.enable({ "lua_ls", "yamlls" })

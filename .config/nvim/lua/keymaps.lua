@@ -79,13 +79,28 @@ vim.keymap.set({ 'n', 'x' }, '<leader>P', '"+P', { desc = 'Paste from system cli
 -- Toggle line wrapping
 vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', opts)
 
--- markdown preview
-vim.keymap.set("n", "<leader>mp", ":MarkdownPreviewToggle<cr>")
+-- Show diagnostic float
+vim.keymap.set('n', '<leader>td', function()
+  vim.diagnostic.open_float(nil, { scope = 'cursor', focus = false })
+end, { desc = 'Show diagnostic float' })
 
 -- search for files in full vault
-vim.keymap.set("n", "<leader>os", ":Telescope find_files search_dirs={\"~/notes\"}<cr>")
-vim.keymap.set("n", "<leader>og", ":Telescope live_grep search_dirs={\"~/notes\"}<cr>")
+-- vim.keymap.set("n", "<leader>os", ":Telescope find_files search_dirs={\"~/notes\"}<cr>")
+-- vim.keymap.set("n", "<leader>og", ":Telescope live_grep search_dirs={\"~/notes\"}<cr>")
 
+vim.keymap.set("n", "<leader>os", function()
+  require("telescope.builtin").find_files({
+    search_dirs = { "~/notes" },
+    file_ignore_patterns = { "%.obsidian/" },
+  })
+end)
+
+vim.keymap.set("n", "<leader>og", function()
+  require("telescope.builtin").live_grep({
+    search_dirs = { "~/notes" },
+    file_ignore_patterns = { "%.obsidian/" },
+  })
+end)
 -- navigate to vault
 vim.keymap.set("n", "<leader>oo", ":cd ~/notes<cr>")
 --
