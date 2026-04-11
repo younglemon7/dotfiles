@@ -77,3 +77,6 @@ vim.opt.splitright = true -- Vertical splits go right
 -- Hover border format
 vim.opt.winborder = "rounded"
 
+vim.cmd(
+  "set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯЖ;ABCDEFGHIJKLMNOPQRSTUVWXYZ:,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"
+)

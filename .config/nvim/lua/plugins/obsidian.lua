@@ -11,7 +11,27 @@ require("obsidian").setup({
     },
   },
   notes_subdir = "0 Inbox",
-  new_notes_location = "notes_subdir",
+  new_notes_location = "current_dir",
+  note_id_func = function(title)
+    if title ~= nil then
+      local slug = title:lower()
+      slug = slug:gsub("%s+", "-")
+      slug = slug:gsub("[^a-z0-9-]", "")
+      slug = slug:gsub("-+", "-")
+      slug = slug:gsub("^-", "")
+      slug = slug:gsub("-$", "")
+
+      if slug ~= "" then
+        return slug
+      end
+    end
+
+    local suffix = ""
+    for _ = 1, 4 do
+      suffix = suffix .. string.char(math.random(65, 90))
+    end
+    return tostring(os.time()) .. "-" .. suffix
+  end,
   daily_notes = {
     folder = "notes/dailies",
     date_format = "YYYY-MM-DD",
@@ -39,6 +59,14 @@ require("obsidian").setup({
     nvim_cmp = true,
     min_chars = 2,
   },
+  follow_url_func = function(url)
+    if vim.ui and vim.ui.open then
+      vim.ui.open(url)
+      return
+    end
+
+    vim.fn.jobstart({ "open", url }, { detach = true })
+  end,
   picker = {
     name = "telescope.nvim",
   },

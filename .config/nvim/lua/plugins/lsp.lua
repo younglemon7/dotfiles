@@ -6,7 +6,7 @@ vim.pack.add({
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-	ensure_installed = { "lua_ls", "yamlls" },
+	ensure_installed = { "lua_ls", "yamlls", "helm_ls" },
 })
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -62,4 +62,15 @@ vim.lsp.config("yamlls", {
 	},
 })
 
-vim.lsp.enable({ "lua_ls", "yamlls" })
+vim.lsp.config("helm_ls", {
+	capabilities = capabilities,
+	settings = {
+		["helm-ls"] = {
+			yamlls = {
+				enabled = false,
+			},
+		},
+	},
+})
+
+vim.lsp.enable({ "lua_ls", "yamlls", "helm_ls" })
