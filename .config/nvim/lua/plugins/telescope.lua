@@ -2,6 +2,7 @@ vim.pack.add {
   { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   { src = "https://github.com/nvim-telescope/telescope.nvim", branch = "master" },
   { src = "https://github.com/nvim-lua/plenary.nvim" },
+  { src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
 }
 local actions = require 'telescope.actions'
 require('telescope').setup {

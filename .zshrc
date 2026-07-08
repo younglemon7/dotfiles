@@ -4,6 +4,7 @@
 # ==============================================================================
 # 1. INITIALIZATION AND PATH SETUP
 # ==============================================================================
+alias tshark='tshark --color'
 
 # Ensure UTF-8 locale
 export LANG=en_US.UTF-8
@@ -19,10 +20,33 @@ fi
 # Initialize Homebrew shell environment
 if command -v brew &> /dev/null; then
     eval "$(brew shellenv)"
-    
+
     # Add Homebrew completions to FPATH
     FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
 fi
+
+_ssh_pick_host () {
+  awk '/^Host[ \t]+/ {for (i=2; i<=NF; i++) if ($i !~ /[*!?]/) print $i}' ~/.ssh/config 2>/dev/null \
+    | sort -u \
+    | fzf \
+        --header 'enter: connect | ctrl-y: copy host config' \
+        --preview 'awk -v host={} '\''tolower($1)=="host" {show=0; for (i=2; i<=NF; i++) if ($i==host) show=1} show {print}'\'' ~/.ssh/config' \
+        --bind 'ctrl-y:execute-silent(awk -v host={} '\''tolower($1)=="host" {show=0; for (i=2; i<=NF; i++) if ($i==host) show=1} show {print}'\'' ~/.ssh/config | pbcopy)+bell'
+}
+
+ssh () {
+  if (( $# == 0 )); then
+    local server
+    server=$(_ssh_pick_host)
+    if [[ -n $server ]]; then
+      print -s -- "ssh $server"
+      command ssh -- "$server"
+    fi
+    return
+  fi
+
+  command ssh "$@"
+}
 
 # ==============================================================================
 # 2. COMPLETION SYSTEM
@@ -36,10 +60,25 @@ else
     compinit -C
 fi
 
+source "$(gcloud info --format='value(installation.sdk_root)')/path.zsh.inc"
+# NOTE: Disabled due runtime completion errors in current SDK/zsh combo
+# (gcloud _next_label / _setup bad output format specification).
+# Re-enable after SDK fix if needed.
+# source "$(gcloud info --format='value(installation.sdk_root)')/completion.zsh.inc"
+
+
 # Completion configuration
 zstyle ':completion:*' menu no
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' rehash true
+
+# SSH completion only from ~/.ssh/config
+zstyle ':completion:*:(ssh|scp|sftp|rsync):*' hosts \
+  ${(f)"$(awk '/^Host[ \t]+/ {for (i=2; i<=NF; i++) if ($i !~ /[*!?]/) print $i}' ~/.ssh/config 2>/dev/null | sort -u)"}
+
+# For ssh completion show only hosts (hide system users)
+zstyle ':completion:*:*:ssh:*:*' tag-order hosts
+zstyle ':completion:*:*:ssh:*:users' ignored-patterns '*'
 
 # Word style for better text navigation
 autoload -Uz select-word-style
@@ -55,7 +94,6 @@ bindkey '^X^E' edit-command-line
 
 # File listing with eza (modern ls replacement)
 if command -v eza &> /dev/null; then
-    alias ls='eza --icons always'
     alias l='eza -l --icons --git'
     alias la='eza -la --icons --git'
     alias ll='eza -la --icons --git'
@@ -83,6 +121,8 @@ alias dotfiles-ls='dotfiles ls-tree -r main --name-only'
 
 # Custom binaries
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/scripts"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 # Editor settings
 export EDITOR='nvim'
@@ -121,6 +161,8 @@ bindkey '^[[1;3C' forward-word   # Option + Right Arrow
 # Zsh plugins (check existence before sourcing)
 if command -v fzf &> /dev/null; then
     source <(fzf --zsh)
+    # Keep Tab on normal completion
+    bindkey '^I' expand-or-complete
 fi
 
 if command -v starship &> /dev/null; then
@@ -143,7 +185,7 @@ if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; the
     source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 elif [[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
     source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-    
+
     # Configure auto-suggestions
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a"
     ZSH_AUTOSUGGEST_STRATEGY=(history completion)
@@ -178,16 +220,9 @@ zedit() {
 # ==============================================================================
 
 # Load local overrides if they exist
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+#[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 #compdef opencode
-###-begin-opencode-completions-###
-#
-# yargs command completion script
-#
-# Installation: opencode completion >> ~/.zshrc
-#    or opencode completion >> ~/.zprofile on OSX.
-#
 _opencode_yargs_completions()
 {
   local reply
@@ -207,11 +242,5 @@ else
   compdef _opencode_yargs_completions opencode
 fi
 ###-end-opencode-completions-###
-
-
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/lemon/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit && compinit

@@ -1,6 +1,7 @@
-vim.pack.add({ "https://github.com/obsidian-nvim/obsidian.nvim" }, { "https://github.com/nvim-lua/plenary.nvim" })
-
-local mappings = require("obsidian.mappings")
+vim.pack.add({
+  { src = "https://github.com/obsidian-nvim/obsidian.nvim" },
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
+})
 
 require("obsidian").setup({
   legacy_commands = false,
@@ -43,30 +44,17 @@ require("obsidian").setup({
     enabled = true,
   },
   ui = {
-    enable = true,
+    enable = false,
   },
   templates = {
     folder = "templates",
     date_format = "YYYY-MM-DD",
     time_format = "HH:mm:ss",
   },
-  mappings = {
-    ["gf"] = mappings.gf_passthrough(),
-    ["<leader>ch"] = mappings.toggle_checkbox(),
-    ["<cr>"] = mappings.smart_action(),
-  },
   completion = {
     nvim_cmp = true,
     min_chars = 2,
   },
-  follow_url_func = function(url)
-    if vim.ui and vim.ui.open then
-      vim.ui.open(url)
-      return
-    end
-
-    vim.fn.jobstart({ "open", url }, { detach = true })
-  end,
   picker = {
     name = "telescope.nvim",
   },

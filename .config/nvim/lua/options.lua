@@ -37,6 +37,28 @@ vim.opt.concealcursor = "" -- Don't hide cursor line markup
 vim.opt.lazyredraw = true -- Don't redraw during macros
 vim.opt.synmaxcol = 300 -- Syntax highlighting limit
 
+-- Markdown fenced code block highlighting fallback
+vim.g.markdown_recommended_style = 0
+vim.g.markdown_fenced_languages = {
+  "bash=sh",
+  "zsh=sh",
+  "shell=sh",
+  "sh",
+  "lua",
+  "python",
+  "go",
+  "yaml",
+  "yml=yaml",
+  "json",
+  "jsonc=json",
+  "toml",
+  "javascript",
+  "js=javascript",
+  "typescript",
+  "ts=typescript",
+  "tsx=typescript.tsx",
+}
+
 -- File handling
 vim.opt.backup = false -- Don't create backup files
 vim.opt.writebackup = false -- Don't create backup before writing
