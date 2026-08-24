@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-gemini-auth@latest"]
+  // "mcp": {
+  //   "gitlab": {
+  //     "type": "local",
+  //     "command": ["npx", "-y", "@zereight/mcp-gitlab"],
+  //     "enabled": true,
+  //     "env": {
+  //       "GITLAB_PERSONAL_ACCESS_TOKEN": "{env:GITLAB_PERSONAL_ACCESS_TOKEN}",
+  //       "GITLAB_API_URL": "{env:GITLAB_API_URL}",
+  //       "GITLAB_PERMISSION_MODE": "readonly"
+  //     }
+  //   },
+  //   "jira": {
+  //     "type": "local",
+  //     "command": ["npx", "-y", "@aashari/mcp-server-atlassian-jira"],
+  //     "enabled": true,
+  //     "env": {
+  //       "ATLASSIAN_SITE_NAME": "{env:ATLASSIAN_SITE_NAME}",
+  //       "ATLASSIAN_USER_EMAIL": "{env:ATLASSIAN_USER_EMAIL}",
+  //       "ATLASSIAN_API_TOKEN": "{env:ATLASSIAN_API_TOKEN}"
+  //     }
+  //   }
+  // }
+}

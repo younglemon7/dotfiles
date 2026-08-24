@@ -1,6 +1,10 @@
 #!/usr/bin/env zsh
 # ~/.zshrc
 
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
+
 # ==============================================================================
 # 1. INITIALIZATION AND PATH SETUP
 # ==============================================================================
@@ -59,12 +63,6 @@ if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
 else
     compinit -C
 fi
-
-source "$(gcloud info --format='value(installation.sdk_root)')/path.zsh.inc"
-# NOTE: Disabled due runtime completion errors in current SDK/zsh combo
-# (gcloud _next_label / _setup bad output format specification).
-# Re-enable after SDK fix if needed.
-# source "$(gcloud info --format='value(installation.sdk_root)')/completion.zsh.inc"
 
 
 # Completion configuration
@@ -169,10 +167,6 @@ if command -v starship &> /dev/null; then
     eval "$(starship init zsh)"
 fi
 
-if command -v kubectl &> /dev/null; then
-    source <(kubectl completion zsh)
-fi
-
 # Syntax highlighting (must be sourced last)
 if [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
     source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -244,3 +238,10 @@ fi
 ###-end-opencode-completions-###
 fpath=(~/.zsh/completions $fpath)
 autoload -U compinit && compinit
+
+if command -v kubectl &> /dev/null; then
+    source <(kubectl completion zsh)
+fi
+
+# kimi-code
+export PATH="/Users/lemon/.kimi-code/bin:$PATH"
